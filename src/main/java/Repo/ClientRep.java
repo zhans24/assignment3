@@ -10,15 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientRep {
-    public void CreateCl() throws Exception{
-        try(Connection con=DB.getconnection()){
-            String query="CREATE TABLE IF NOT EXISTS Clients ( id SERIAL PRIMARY KEY , name VARCHAR(50),phone VARCHAR(15));";
-            PreparedStatement st= con.prepareStatement(query);
-            st.execute();
-        }
-    }
 
-    public static void AddCl(Client client) throws Exception{
+
+    public  void AddCl(Client client) throws Exception{
         try(Connection con=DB.getconnection()) {
             String query="INSERT INTO Clients (name,phone) VALUES ( ?,?);";
             PreparedStatement st=con.prepareStatement(query);
@@ -29,7 +23,7 @@ public class ClientRep {
         }
     }
 
-    public static void DelCl(int id) throws Exception{
+    public  void DeleteCl(int id) throws Exception{
         try (Connection con=DB.getconnection()){
             String query="DELETE FROM Clients WHERE id=?";
             PreparedStatement st=con.prepareStatement(query);
@@ -39,7 +33,7 @@ public class ClientRep {
     }
 
 
-    public  static Client getByID(int id) throws Exception{
+    public  Client getByID(int id) throws Exception{
         try (Connection con=DB.getconnection()){
             String query="SELECT * FROM Clients WHERE id=?";
             PreparedStatement st=con.prepareStatement(query);
@@ -56,10 +50,10 @@ public class ClientRep {
         }
     }
 
-    public static List<Client> getAll() throws Exception{
+    public  List<Client> getAll() throws Exception{
         List<Client> clients=new ArrayList<>();
         try (Connection con=DB.getconnection()){
-            String query="SELECT * FROM Clients";
+            String query="SELECT * FROM Clients ORDER BY id asc ;";
             PreparedStatement st=con.prepareStatement(query);
             ResultSet rs=st.executeQuery();
             while (rs.next()){
@@ -74,7 +68,7 @@ public class ClientRep {
     }
 
 
-    public static void UpdateCl(Client client) throws Exception {
+    public  void UpdateCl(Client client) throws Exception {
         try (Connection con=DB.getconnection()){
             String query="UPDATE clients SET name=? , phone=? WHERE id =?";
             PreparedStatement st=con.prepareStatement(query);

@@ -1,21 +1,131 @@
 package Services;
 
 import Repo.ClientRep;
+import Services.AbstractService.Service;
 import category.Client;
 
-import java.util.Scanner;
 
-public class ClientService {
-    static Scanner scanner=new Scanner(System.in);
-    public static void viewClient(ClientRep rep) throws Exception {
+import java.util.List;
+
+public class ClientService extends Service {
+
+    public ClientService(ClientRep clientRep) throws Exception {
+        super(clientRep);
+        System.out.println("----------------------------------\nWelcome to the client panel\n----------------------------------");
+        boolean returnToAdminPanel = false;
+        while (!returnToAdminPanel) {
+            System.out.println("1. Add client");
+            System.out.println("2. Delete client");
+            System.out.println("3. Update client");
+            System.out.println("4. View client");
+            System.out.println("5. Show all clients");
+            System.out.println("6. Back");
+            System.out.print("\nEnter your choice: ");
+            int c=scanner.nextInt();
+            System.out.println();
+            switch (c) {
+                case 1:
+                    addClient();
+                    break;
+                case 2:
+                    DeleteClient();
+                    break;
+                case 3:
+                    UpdateClient();
+                    break;
+                case 4:
+                    viewClient();
+                    break;
+                case 5:
+                    AllClients();
+                    break;
+                case 6:
+                    returnToAdminPanel=true;
+                    break;
+                default:
+                    System.out.println("Please enter correctly choice!");
+            }
+        }
+
+    }
+
+    public void viewClient() throws Exception {
         System.out.print("Enter client's ID:");
         int id = scanner.nextInt();
-        Client client=ClientRep.getByID(id);
-
+        Client client= clientRep.getByID(id);
         if (client!=null){
             System.out.println("ID:"+client.getId());
             System.out.println("NAME:"+client.getName());
             System.out.println("PHONE:"+client.getPhone());
         }else System.out.println("CLIENT NOT FOUND");
     }
+
+    public void addClient() throws Exception{
+        Client client=new Client();
+        System.out.print("Enter client name:");
+        String name= scanner.next();
+        while (name.isEmpty() || !name.matches("[a-zA-Z ]+") ) {
+            System.out.println("Invalid name");
+            System.out.print("Write name correctly:");
+            name=scanner.next();
+        }
+        client.setName(name);
+
+        System.out.print("Enter client phone:");
+        client.setPhone(scanner.next());
+
+        clientRep.AddCl(client);
+        System.out.println("****************\n");
+        System.out.println("Client added\n");
+        System.out.println("****************\n");
+    }
+
+    public void AllClients() throws Exception{
+        List<Client> clients=clientRep.getAll();
+        for(Client client:clients){
+            System.out.println("ID:"+client.getId());
+            System.out.println("NAME:"+client.getName());
+            System.out.println("PHONE:"+client.getPhone());
+        }
+    }
+
+    public void DeleteClient() throws Exception {
+        System.out.print("Enter client's ID:");
+        clientRep.DeleteCl(scanner.nextInt());
+        System.out.println("Successfully deleted");
+    }
+
+
+    public void UpdateClient() throws Exception{
+        System.out.print("Enter client's ID:");
+        Client client=clientRep.getByID(scanner.nextInt());
+
+        if (client!=null){
+            System.out.print("Enter client name to change:");
+            String name= scanner.next();
+
+            if (name.isEmpty() || !name.matches("[a-zA-Z ]+") ){
+                System.out.println("Impossible name");
+            }else client.setName(name);
+
+
+            System.out.print("Enter the phone to change:");
+            String phone=scanner.next();
+
+            if (phone.isEmpty()) System.out.println("The phone number is empty");
+            else client.setPhone(phone);
+
+            clientRep.UpdateCl(client);
+
+            System.out.println("Client updated");
+
+        }else System.out.println("Client NOT found");
+
+    }
+
+
+
+
+
+
 }

@@ -9,6 +9,6 @@ import lombok.*;
 @ToString
 public class Menu {
     private int id;
-    private String Doner;
+    private String doner;
     private int price;
 }
