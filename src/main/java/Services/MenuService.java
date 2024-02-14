@@ -46,7 +46,10 @@ public class MenuService extends Service {
         };
     }
 
-    public void AddDoner(){
+
+
+
+    public static void AddDoner(){
         Menu menu=new Menu();
         System.out.print("Enter the type of doner:");
         String doner=scanner.next();
@@ -71,13 +74,13 @@ public class MenuService extends Service {
     }
 
 
-    public void DeleteDoner(){
+    public static void DeleteDoner(){
         System.out.print("Enter doner's id:");
         menuRep.DeleteMenu(scanner.nextInt());
         System.out.println("Successfully deleted");
     }
 
-    public void ViewDoner(){
+    public static void ViewDoner(){
         System.out.print("Enter doner's id:");
         Menu doner=menuRep.getByID(scanner.nextInt());
         if (doner!=null){
@@ -87,7 +90,7 @@ public class MenuService extends Service {
         }else System.out.println("We hasn't that doner");
     }
 
-    public void UpdateDoner(){
+    public static void UpdateDoner(){
         System.out.print("Enter doner's id:");
         Menu doner=menuRep.getByID(scanner.nextInt());
 
@@ -117,7 +120,7 @@ public class MenuService extends Service {
     }
 
 
-    public void ShowAll() {
+    public static void ShowAll() {
         List<Menu> menus=menuRep.getAll();
         for (Menu menu:menus){
             System.out.println("ID:"+menu.getId());
@@ -126,7 +129,6 @@ public class MenuService extends Service {
             System.out.println("------------------------------");
         }
     }
-
 
 
 }

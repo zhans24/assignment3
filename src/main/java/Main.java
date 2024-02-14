@@ -3,6 +3,7 @@ import Repo.MenuRep;
 import Services.AbstractService.Service;
 import Services.ClientService;
 import Services.MenuService;
+import Services.OrderService;
 
 import java.util.Scanner;
 
@@ -33,7 +34,7 @@ public class Main {
                     break;
 
                 case 2:
-
+                    new OrderService(menuRep);
                     break;
                 case 3:
                     System.out.println("   ***      ***   ");
@@ -48,7 +49,7 @@ public class Main {
                     System.out.println("        ***      ");
                     return;
                 default:
-                    System.out.println("Incorrect choice");
+                    System.out.println("Incorrect choice.Choose between 1-3");
             }
         }
     }

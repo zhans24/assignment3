@@ -11,10 +11,10 @@ import java.util.Scanner;
 @Setter
 @Getter
 public abstract class Service {
-    public static final String Password="1234zh";
-    protected  Scanner scanner;
+    public static final String Password="0000";
+    protected static Scanner scanner;
     protected ClientRep clientRep;
-    protected MenuRep menuRep;
+    protected static MenuRep menuRep;
     public Service(ClientRep clientRep){
         this.clientRep =clientRep;
         scanner=new Scanner(System.in);

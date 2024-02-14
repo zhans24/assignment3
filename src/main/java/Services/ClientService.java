@@ -49,6 +49,7 @@ public class ClientService extends Service {
 
     }
 
+
     public void viewClient() throws Exception {
         System.out.print("Enter client's ID:");
         int id = scanner.nextInt();
