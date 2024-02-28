@@ -14,10 +14,12 @@ public class ClientRep {
 
     public  void AddCl(Client client) throws Exception{
         try(Connection con=DB.getconnection()) {
-            String query="INSERT INTO Clients (name,phone) VALUES ( ?,?);";
+            String query="INSERT INTO Clients (name,phone,login,password) VALUES ( ?,?,?,?);";
             PreparedStatement st=con.prepareStatement(query);
             st.setString(1, client.getName());
             st.setString(2,client.getPhone());
+            st.setString(3,client.getLogin());
+            st.setString(4,client.getPassword());
             st.execute();
 
         }
@@ -25,7 +27,7 @@ public class ClientRep {
 
     public  void DeleteCl(int id) throws Exception{
         try (Connection con=DB.getconnection()){
-            String query="DELETE FROM Clients WHERE id=?";
+            String query="DELETE FROM Clients WHERE client_id=?";
             PreparedStatement st=con.prepareStatement(query);
             st.setInt(1,id);
             st.execute();
@@ -35,15 +37,15 @@ public class ClientRep {
 
     public  Client getByID(int id) throws Exception{
         try (Connection con=DB.getconnection()){
-            String query="SELECT * FROM Clients WHERE id=?";
+            String query="SELECT * FROM Clients WHERE client_id=?";
             PreparedStatement st=con.prepareStatement(query);
             st.setInt(1,id);
             ResultSet rs=st.executeQuery();
             if (rs.next()) {
-                Client client = new Client();
-                client.setId(rs.getInt("id"));
-                client.setName(rs.getString("name"));
-                client.setPhone(rs.getString("phone"));
+                Client client = Client.builder().setId(rs.getInt("client_id"))
+                                                .setName(rs.getString("name"))
+                                                .setPhone(rs.getString("phone"))
+                                                .build();
 
                 return client;
             }else return null;
@@ -53,14 +55,14 @@ public class ClientRep {
     public  List<Client> getAll() throws Exception{
         List<Client> clients=new ArrayList<>();
         try (Connection con=DB.getconnection()){
-            String query="SELECT * FROM Clients ORDER BY id asc ;";
+            String query="SELECT * FROM Clients ORDER BY client_id asc ;";
             PreparedStatement st=con.prepareStatement(query);
             ResultSet rs=st.executeQuery();
             while (rs.next()){
-                Client client=new Client();
-                client.setId(rs.getInt("id"));
-                client.setName(rs.getString("name"));
-                client.setPhone(rs.getString("phone"));
+                Client client = Client.builder().setId(rs.getInt("client_id"))
+                                                .setName(rs.getString("name"))
+                                                .setPhone(rs.getString("phone"))
+                                                .build();
                 clients.add(client);
             }
             return clients;
@@ -70,7 +72,7 @@ public class ClientRep {
 
     public  void UpdateCl(Client client) throws Exception {
         try (Connection con=DB.getconnection()){
-            String query="UPDATE clients SET name=? , phone=? WHERE id =?";
+            String query="UPDATE clients SET name=? , phone=? WHERE client_id =?";
             PreparedStatement st=con.prepareStatement(query);
 
             st.setString(1,client.getName());

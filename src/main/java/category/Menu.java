@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Builder(setterPrefix = "set")
 public class Menu {
     private int id;
     private String doner;

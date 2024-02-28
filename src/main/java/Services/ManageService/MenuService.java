@@ -1,7 +1,7 @@
-package Services;
+package Services.ManageService;
 
 import Repo.MenuRep;
-import Services.AbstractService.Service;
+import Services.MainService.Service;
 import category.Menu;
 
 import java.util.List;
@@ -49,8 +49,7 @@ public class MenuService extends Service {
 
 
 
-    public static void AddDoner(){
-        Menu menu=new Menu();
+    public  void AddDoner(){
         System.out.print("Enter the type of doner:");
         String doner=scanner.next();
         while (doner.isEmpty() || !doner.matches("[a-zA-Z ]+")){
@@ -58,7 +57,7 @@ public class MenuService extends Service {
             System.out.print("\nTry again:");
             doner=scanner.next();
         }
-        menu.setDoner(doner);
+
         System.out.print("Enter the price:");
         while (!scanner.hasNextInt()){
             System.out.println("Please enter a valid number for the price.");
@@ -66,7 +65,8 @@ public class MenuService extends Service {
             System.out.print("Enter the price:");
         }
         int price= scanner.nextInt();
-        menu.setPrice(price);
+
+        Menu menu=Menu.builder().setDoner(doner).setPrice(price).build();
 
         menuRep.AddMenu(menu);
 
@@ -74,13 +74,13 @@ public class MenuService extends Service {
     }
 
 
-    public static void DeleteDoner(){
+    public  void DeleteDoner(){
         System.out.print("Enter doner's id:");
         menuRep.DeleteMenu(scanner.nextInt());
         System.out.println("Successfully deleted");
     }
 
-    public static void ViewDoner(){
+    public  void ViewDoner(){
         System.out.print("Enter doner's id:");
         Menu doner=menuRep.getByID(scanner.nextInt());
         if (doner!=null){
@@ -90,7 +90,7 @@ public class MenuService extends Service {
         }else System.out.println("We hasn't that doner");
     }
 
-    public static void UpdateDoner(){
+    public  void UpdateDoner(){
         System.out.print("Enter doner's id:");
         Menu doner=menuRep.getByID(scanner.nextInt());
 
@@ -120,7 +120,7 @@ public class MenuService extends Service {
     }
 
 
-    public static void ShowAll() {
+    public void ShowAll() {
         List<Menu> menus=menuRep.getAll();
         for (Menu menu:menus){
             System.out.println("ID:"+menu.getId());

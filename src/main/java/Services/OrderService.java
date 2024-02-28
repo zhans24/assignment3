@@ -1,17 +1,21 @@
 package Services;
 
-import Repo.ClientRep;
+import Repo.AdminRep;
 import Repo.MenuRep;
-import Services.AbstractService.Service;
+import Repo.OrderRep;
+import Services.MainService.Service;
+import Services.ManageService.MenuService;
 import category.Menu;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
+import java.util.ArrayList;
+import java.util.List;
+//SELECT orders.id, clients.name, clients.phone, menu.doner FROM orders JOIN clients ON clients.client_id = orders.client_id JOIN menu ON menu.menu_id = orders.menu_doner;
 public class OrderService extends Service {
     private int total=0;
-
-    public OrderService(MenuRep menuRep) {
+    private List<String> doners=new ArrayList<>();
+    public OrderService(MenuRep menuRep,String login) throws Exception {
         super(menuRep);
         LocalTime time= LocalTime.parse(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
         System.out.println("************************************************");
@@ -26,10 +30,10 @@ public class OrderService extends Service {
             System.out.println();
             switch (c) {
                 case 1:
-                    MenuService.ShowAll();
+                    new MenuService(new MenuRep()).ShowAll();
                     System.out.print("What would you like to order?\nEnter ID:");
                     int id=scanner.nextInt();
-                    CalcBill(id);
+                    OrderRep.AddOrder(AdminRep.clientid(login),id);
                     while (true) {
                         System.out.println("__________________________________________\nNice choice! Would you like anything else?\n");
                         System.out.println("1. Order");
@@ -39,11 +43,11 @@ public class OrderService extends Service {
                         System.out.println();
                         switch (c) {
                             case 1:
-                                MenuService.ShowAll();
+                                new MenuService(new MenuRep()).ShowAll();
                                 System.out.print("\nWhat would you like to order?\nEnter ID:");
                                 id=scanner.nextInt();
                                 System.out.println();
-                                CalcBill(id);
+                                OrderRep.AddOrder(AdminRep.clientid(login),id);
                                 break;
                             case 2:
                                 for (int i = 0; i < 35; i++) {
@@ -52,7 +56,13 @@ public class OrderService extends Service {
                                 System.out.println();
                                 System.out.println("             BILL                   ");;
                                 System.out.println("Order time:"+time);
-                                System.out.println("Total:"+total+"\n");
+                                System.out.println("You ordered:");
+                                int counter = 1;
+                                for (String doner : doners) {
+                                    System.out.println(counter + ". " + doner);
+                                    counter++;
+                                }
+                                System.out.println("\n"+"Total: "+total+"\n");
                                 for (int i = 0; i < 35; i++) {
                                     System.out.print("⃝ ");
                                 }
@@ -69,10 +79,6 @@ public class OrderService extends Service {
                     System.out.println("Please enter correctly choice!");
             }
         }
-    }
-    public void CalcBill(int id){
-        Menu doner=menuRep.getByID(id);
-        total+=doner.getPrice();
     }
 
 

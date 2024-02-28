@@ -23,7 +23,7 @@ public class MenuRep {
 
 
 
-    public MenuRep() throws Exception {
+    public MenuRep() {
     }
 
 
@@ -35,14 +35,14 @@ public class MenuRep {
             st.setString(1,menu.getDoner());
             st.setInt(2,menu.getPrice());
             st.execute();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());;
+        } catch (SQLException kkk) {
+            System.out.println(kkk.getMessage());;
         }
     }
 
     public void DeleteMenu(int id){
         try {
-            String query="DELETE FROM menu WHERE id=?;";
+            String query="DELETE FROM menu WHERE menu_id=?;";
 
             PreparedStatement st=connection.prepareStatement(query);
             st.setInt(1,id);
@@ -55,12 +55,12 @@ public class MenuRep {
     public List<Menu> getAll() {
         List<Menu> menus=new ArrayList<>();
         try {
-            String query="SELECT * FROM menu ORDER BY id asc ";
+            String query="SELECT * FROM menu ORDER BY menu_id asc ";
             PreparedStatement st=connection.prepareStatement(query);
             ResultSet rs=st.executeQuery();
             while (rs.next()){
                 Menu menu=new Menu();
-                menu.setId(rs.getInt("id"));
+                menu.setId(rs.getInt("menu_id"));
                 menu.setDoner(rs.getString("Doner"));
                 menu.setPrice(rs.getInt("price"));
                 menus.add(menu);
@@ -74,12 +74,12 @@ public class MenuRep {
     public Menu getByID(int id) {
         Menu menu=new Menu();
         try {
-            String query="SELECT * FROM menu WHERE id=?";
+            String query="SELECT * FROM menu WHERE menu_id=?";
             PreparedStatement st=connection.prepareStatement(query);
             st.setInt(1,id);
             ResultSet rs=st.executeQuery();
             if (rs.next()){
-                menu.setId(rs.getInt("id"));
+                menu.setId(rs.getInt("menu_id"));
                 menu.setDoner(rs.getString("Doner"));
                 menu.setPrice(rs.getInt("price"));
             }
@@ -94,7 +94,7 @@ public class MenuRep {
 
     public void Update(Menu menu){
         try {
-            String query="UPDATE menu SET doner=? , price=? WHERE id=?;";
+            String query="UPDATE menu SET doner=? , price=? WHERE menu_id=?;";
 
             PreparedStatement st=connection.prepareStatement(query);
 
