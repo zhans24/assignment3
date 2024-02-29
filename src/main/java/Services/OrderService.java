@@ -21,8 +21,7 @@ public class OrderService extends Service {
         System.out.println("************************************************");
         System.out.println("*  Welcome to the most delicious doner place!  *");
         System.out.println("************************************************");
-        boolean returnToMain = false;
-        while (!returnToMain) {
+        while (true) {
             System.out.println("1. Menu");
             System.out.println("2. Back");
             System.out.print("Enter your choice: ");
@@ -33,7 +32,7 @@ public class OrderService extends Service {
                     new MenuService(new MenuRep()).ShowAll();
                     System.out.print("What would you like to order?\nEnter ID:");
                     int id=scanner.nextInt();
-                    OrderRep.AddOrder(AdminRep.clientid(login),id);
+                    OrderRep.AddOrder(adminRep.clientid(login),id);
                     while (true) {
                         System.out.println("__________________________________________\nNice choice! Would you like anything else?\n");
                         System.out.println("1. Order");
@@ -47,7 +46,7 @@ public class OrderService extends Service {
                                 System.out.print("\nWhat would you like to order?\nEnter ID:");
                                 id=scanner.nextInt();
                                 System.out.println();
-                                OrderRep.AddOrder(AdminRep.clientid(login),id);
+                                OrderRep.AddOrder(adminRep.clientid(login),id);
                                 break;
                             case 2:
                                 for (int i = 0; i < 35; i++) {
@@ -73,8 +72,7 @@ public class OrderService extends Service {
                         }
                     }
                 case 2:
-                    returnToMain = true;
-                    break;
+                    return;
                 default:
                     System.out.println("Please enter correctly choice!");
             }

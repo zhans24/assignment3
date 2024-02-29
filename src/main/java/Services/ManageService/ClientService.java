@@ -35,7 +35,7 @@ public class ClientService extends Service {
                     UpdateClient();
                     break;
                 case 4:
-                    viewAdmin();
+                    viewClient();
                     break;
                 case 5:
                     AllClients();
@@ -51,10 +51,10 @@ public class ClientService extends Service {
     }
 
 
-    public void viewAdmin() throws Exception {
-        System.out.print("Enter admin's ID:");
+    public void viewClient() throws Exception {
+        System.out.print("Enter client's ID:");
         int id = scanner.nextInt();
-        Client client= new AdminRep().getByID(id);
+        Client client= clientRep.getByID(id);
         if (client!=null){
             System.out.println("ID:"+client.getId());
             System.out.println("NAME:"+client.getName());
@@ -106,21 +106,21 @@ public class ClientService extends Service {
             System.out.print("Enter client name to change:");
             String name= scanner.next();
 
-            if (name.isEmpty() || !name.matches("[a-zA-Z ]+") ){
-                System.out.println("Impossible name");
+            while (name.isEmpty() || !name.matches("[a-zA-Z ]+") ){
+                System.out.print("Impossible name.Enter again:");
+                name=scanner.next();
             }
 
 
             System.out.print("Enter the phone to change:");
             String phone=scanner.next();
 
-            if (phone.isEmpty()) System.out.println("The phone number is empty");
-
-            client=Client.builder()
-                    .setName(name)
-                    .setPhone(phone)
-                    .build();
-
+            while (phone.isEmpty()){
+                System.out.print("The phone number is empty.Enter again:");
+                phone=scanner.next();
+            }
+            client.setName(name);
+            client.setPhone(phone);
             clientRep.UpdateCl(client);
 
             System.out.println("Client updated");

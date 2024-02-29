@@ -58,6 +58,13 @@ public class Main {
 
                     System.out.print("Enter login:");
                     String log=scanner.next();
+                    while (AdminRep.isLoginOccupied(log)){
+                        System.out.println("☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢");
+                        System.out.println("☢ Login is occupied.Enter another login,please! ☢\n");
+
+                        System.out.print("Enter login:");
+                        log = scanner.next();
+                    }
                     System.out.print("Enter password:");
                     String pw=scanner.next();
                     System.out.print("Enter the password again:");
@@ -71,12 +78,16 @@ public class Main {
                                     .setPhone(phone)
                                     .setLogin(log)
                                     .setPassword(pw)
+                                    .setStatus("client")
                                     .build());
                     System.out.println("****************\n");
                     System.out.println(" Account created\n");
                     System.out.println("****************\n");
 
-
+                    choice=1;
+                    break;
+                default:
+                    System.out.println("Incorrectly choice.Try again:");
             }
 
         }

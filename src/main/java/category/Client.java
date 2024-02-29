@@ -2,6 +2,7 @@ package category;
 import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(setterPrefix = "set")

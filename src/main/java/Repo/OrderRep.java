@@ -1,6 +1,8 @@
 package Repo;
 
 import Database.DB;
+import category.Client;
+import category.Menu;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,17 +21,24 @@ public class OrderRep {
         }
     }
 
-//    public static List<Object> Bill() throws Exception{
-//        ArrayList<ArrayList<Object>> bill = new ArrayList<>();
-//        try (Connection connection=DB.getconnection()){
-//            String query="SELECT clients.name,clients.phone,menu.doner,menu.price " +
-//                    "FROM orders JOIN clients ON clients.client_id=orders.client_id" +
-//                    "JOIN menu ON menu.menu_id=orders.menu_doner";
-//            PreparedStatement st=connection.prepareStatement(query);
-//            ResultSet rs=st.executeQuery();
-//            while (rs.next()){
-//
-//            }
-//        }
-//    }
+    public static List<Object> Bill() throws Exception {
+        List<Client> clients = new ArrayList<>();
+        List<Menu> doners = new ArrayList<>();
+        try (Connection connection = DB.getconnection()) {
+            String query = "SELECT clients.name,clients.phone,menu.doner,menu.price " +
+                    "FROM orders JOIN clients ON clients.client_id=orders.client_id" +
+                    "JOIN menu ON menu.menu_id=orders.menu_doner";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Client client = Client.builder().setName(rs.getString("name")).setPhone(rs.getString("phone")).build();
+                clients.add(client);
+                Menu doner = Menu.builder()
+                        .setDoner(rs.getString("doner")).setPrice(rs.getInt("price")).build();
+                doners.add(doner);
+            }
+        }
+
+    }
+
 }

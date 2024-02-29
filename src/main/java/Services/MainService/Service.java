@@ -70,6 +70,7 @@ public class Service {
             switch (choice) {
                 case 1:
                     new DirectorService(new AdminRep());
+                    break;
                 case 2:
                     new ClientService(clientRep);
                     break;

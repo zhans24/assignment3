@@ -25,19 +25,19 @@ public class DirectorService extends Service {
             System.out.println();
             switch (c) {
                 case 1:
-                    addClient();
+                    addAdmin();
                     break;
                 case 2:
-                    DeleteClient();
+                    DeleteAdmin();
                     break;
                 case 3:
-                    UpdateClient();
+                    UpdateAdmin();
                     break;
                 case 4:
-                    viewClient();
+                    ViewAdmin();
                     break;
                 case 5:
-                    AllClients();
+                    AllAdmins();
                     break;
                 case 6:
                     returnToAdminPanel=true;
@@ -48,7 +48,7 @@ public class DirectorService extends Service {
         }
     }
 
-    public void viewClient() throws Exception {
+    public void ViewAdmin() throws Exception {
         System.out.print("Enter admin's ID:");
         int id = scanner.nextInt();
         Client client= adminRep.getByID(id);
@@ -61,39 +61,68 @@ public class DirectorService extends Service {
         }else System.out.println("ADMIN NOT FOUND");
     }
 
-    public void addClient() throws Exception{
-        System.out.println("1. Give admin access by phone");
+    public void addAdmin() throws Exception{
+        System.out.println("1. Give admin access by login");
         System.out.println("2. Create admin");
-            System.out.print("Enter new admin name:");
-            String name= scanner.next();
-            while (name.isEmpty() || !name.matches("[a-zA-Z ]+") ) {
-                System.out.println("Invalid name");
-                System.out.print("Write name correctly:");
-                name=scanner.next();
-            }
+        System.out.print("Choose:");
+        int choice=scanner.nextInt();
+        switch (choice) {
+            case 1:
+                System.out.print("Enter login:");
+                String log=scanner.next();
+                int id=adminRep.clientid(log);
+                while (adminRep.getByID(id)==null || "director".equalsIgnoreCase(AdminRep.getStatus(log))){
+                    System.out.print("Incorrect login.Enter again login:");
+                    log=scanner.next();
+                    id=adminRep.clientid(log);
+                }
+                adminRep.UpdateStatus(id);
+                System.out.println("*************************\n");
+                System.out.println("Access is given for "+log);
+                System.out.println("***************************\n");
+                break;
+            case 2:
+                System.out.print("Enter new admin name:");
+                String name = scanner.next();
+                while (name.isEmpty() || !name.matches("[a-zA-Z ]+")) {
+                    System.out.println("Invalid name");
+                    System.out.print("Write name correctly:");
+                    name = scanner.next();
+                }
 
 
-            System.out.print("Enter admin phone:");
-            String phone=scanner.next();
-            System.out.println("Enter admin login:");
-            String login=scanner.next();
-            System.out.println("Enter admin password:");
-            String password=scanner.next();
+                System.out.print("Enter admin phone:");
+                String phone = scanner.next();
+                System.out.print("Enter admin login:");
+                String login = scanner.next();
+                while (AdminRep.isLoginOccupied(login)){
+                    System.out.println("☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢");
+                    System.out.println("☢ Login is occupied.Enter another login,please! ☢\n");
+                    System.out.print("Enter admin login:");
+                    login = scanner.next();
+                }
+                System.out.println("Enter admin password:");
+                String password = scanner.next();
 
 
-            new AdminRep().AddAdm(Client.builder()
-                    .setName(name)
-                    .setPhone(phone)
-                    .setStatus("Admin")
-                    .setLogin(login)
-                    .setPassword(password)
-                    .build());
-            System.out.println("****************\n");
-            System.out.println("Admin added\n");
-            System.out.println("****************\n");
+                new AdminRep().AddAdm(Client.builder()
+                        .setName(name)
+                        .setPhone(phone)
+                        .setStatus("Admin")
+                        .setLogin(login)
+                        .setPassword(password)
+                        .build());
+                System.out.println("****************\n");
+                System.out.println("Admin added\n");
+                System.out.println("****************\n");
+
+                break;
+            default:
+                System.out.println("Please enter correctly choice!");
+        }
     }
 
-    public void AllClients() throws Exception{
+    public void AllAdmins() throws Exception{
         List<Client> clients=adminRep.getAll();
         for(Client client:clients){
 
@@ -105,41 +134,55 @@ public class DirectorService extends Service {
         }
     }
 
-    public void DeleteClient() throws Exception {
-        System.out.print("Enter client's ID:");
-        clientRep.DeleteCl(scanner.nextInt());
+    public void DeleteAdmin() throws Exception {
+        System.out.print("Enter admin's ID:");
+        int id = scanner.nextInt();
+        while (adminRep.getByID(id)==null) {
+            System.out.println("☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢");
+            System.out.print("It's not admin's id.Enter correct id:");
+            id=scanner.nextInt();
+        }
+        adminRep.DeleteAdm(scanner.nextInt());
         System.out.println("Successfully deleted");
+
     }
 
 
-    public void UpdateClient() throws Exception{
-        System.out.print("Enter client's ID:");
-        Client client=clientRep.getByID(scanner.nextInt());
-
-        if (client!=null){
-            System.out.print("Enter client name to change:");
+    public void UpdateAdmin() throws Exception{
+        System.out.print("Enter admin's ID:");
+        int id = scanner.nextInt();
+        while (adminRep.getByID(id)==null) {
+            System.out.println("☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢☢");
+            System.out.print("It's not admin's id.Enter correct id:");
+            id=scanner.nextInt();
+        }
+        Client admin=adminRep.getByID(id);
+        if (admin!=null){
+            System.out.print("Enter admin name to change:");
             String name= scanner.next();
 
-            if (name.isEmpty() || !name.matches("[a-zA-Z ]+") ){
-                System.out.println("Impossible name");
+            while (name.isEmpty() || !name.matches("[a-zA-Z ]+") ){
+                System.out.print("Impossible name.Enter again:");
+                name=scanner.next();
             }
 
 
             System.out.print("Enter the phone to change:");
             String phone=scanner.next();
 
-            if (phone.isEmpty()) System.out.println("The phone number is empty");
+            while (phone.isEmpty()){
+                System.out.print("The phone number is empty.Enter again:");
+                phone=scanner.next();
+            }
 
-            client=Client.builder()
-                    .setName(name)
-                    .setPhone(phone)
-                    .build();
+            admin.setName(name);
+            admin.setPhone(phone);
 
-            clientRep.UpdateCl(client);
+            adminRep.UpdateAdm(admin);
 
-            System.out.println("Client updated");
+            System.out.println("Admin updated");
 
-        }else System.out.println("Client NOT found");
+        }else System.out.println("Admin NOT found");
 
     }
 }

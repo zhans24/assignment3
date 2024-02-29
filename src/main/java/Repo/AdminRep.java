@@ -12,7 +12,7 @@ import java.util.List;
 public class AdminRep {
     public static String getPassword(String login) throws Exception{
         try(Connection connection=DB.getconnection()){
-            String query="SELECT * FROM Clients WHERE Login = ?";
+            String query="SELECT * FROM Clients WHERE login = ?";
             PreparedStatement st=connection.prepareStatement(query);
             st.setString(1,login);
             ResultSet rs=st.executeQuery();
@@ -23,7 +23,7 @@ public class AdminRep {
 
     public static String getStatus(String login) throws Exception{
         try(Connection connection=DB.getconnection()){
-            String query="SELECT * FROM Clients WHERE Login = ?";
+            String query="SELECT * FROM Clients WHERE login = ?";
             PreparedStatement st=connection.prepareStatement(query);
             st.setString(1,login);
             ResultSet rs=st.executeQuery();
@@ -32,9 +32,9 @@ public class AdminRep {
         }
     }
 
-    public static int clientid(String login) throws Exception{
+    public int clientid(String login) throws Exception{
         try(Connection connection=DB.getconnection()){
-            String query="SELECT * FROM Clients WHERE Login = ?";
+            String query="SELECT * FROM Clients WHERE LOWER(login) = LOWER(?)";
             PreparedStatement st=connection.prepareStatement(query);
             st.setString(1,login);
             ResultSet rs=st.executeQuery();
@@ -55,6 +55,17 @@ public class AdminRep {
             st.setString(5,client.getStatus());
             st.execute();
 
+        }
+    }
+
+    public static boolean isLoginOccupied(String login) throws Exception {
+        try(Connection con = DB.getconnection()) {
+            String query = "SELECT COUNT(*) FROM Clients WHERE LOWER(login) = LOWER(?)";
+            PreparedStatement st = con.prepareStatement(query);
+            st.setString(1, login);
+            ResultSet rs = st.executeQuery();
+            rs.next();
+            return rs.getInt(1) > 0;
         }
     }
 
@@ -110,14 +121,26 @@ public class AdminRep {
 
 
 
-    public static void UpdateAdm(Client client) throws Exception {
+    public void UpdateAdm(Client client) throws Exception {
         try (Connection con=DB.getconnection()){
-            String query="UPDATE clients SET name=? , phone=? WHERE client_id =?";
+            String query="UPDATE clients SET name=? , phone=? WHERE client_id =? and LOWER(status)='admin'";
             PreparedStatement st=con.prepareStatement(query);
 
             st.setString(1,client.getName());
             st.setString(2,client.getPhone());
             st.setInt(3,client.getId());
+
+            st.execute();
+
+        }
+    }
+
+    public void UpdateStatus(int id) throws Exception{
+        try (Connection con=DB.getconnection()){
+            String query="UPDATE clients SET status='admin' WHERE client_id =?";
+            PreparedStatement st=con.prepareStatement(query);
+
+            st.setInt(1,id);
 
             st.execute();
 
